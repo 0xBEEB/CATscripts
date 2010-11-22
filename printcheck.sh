@@ -15,7 +15,7 @@ INFO="This is a test printed by ubiquill at "
 for i in $*
 do
 echo $INFO `date`  " " $i > .print.tmp
-cat ~/Documents/testcats >> .print.tmp
+cat ./testpage >> .print.tmp
 lpr -P $i .print.tmp
 done
 
