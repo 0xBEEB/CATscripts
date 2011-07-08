@@ -18,7 +18,7 @@ COUNTER=0
 MAXCACHE=150
 
 while [ `du $CHROMEDIR | cut -f1` -gt $MAXCACHE ]; do
-	for i in `ls -a $CHROMEDIR -t | tail`;
+	for i in `ls -a $CHROMEDIR -tu | tail`;
 	do
 		rm $CHROMEDIR/$i
 		COUNTER+=1

@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+# runaway
+# by Thomas Schreiber
+# This program checks the load averages of many machines
+
+HOSTS=`/cat/bin/netgrouplist linux-login-sys && /cat/bin/netgrouplist cs-lab-sys && echo nemo.ece.pdx.edu`
+
+ssh-add < /dev/null 2> /dev/null
+
+echo -e "\t HOST \t\t\t\t Load Average"
+echo -e "\t ------------------------------------------------"
+
+for host in $HOSTS
+do
+    LA=`ssh $host uptime | sed 's/^.*load average: //'`
+    NUM=`echo $LA | sed 's/\..*//'`
+    if [ $NUM -eq 0 ]
+    then
+        if [ `expr length $host` -lt 22 ]
+        then
+            echo -e "\e[00;32m\t $host \t\t $LA\e[00m"
+        else
+            echo -e "\e[00;32m\t $host \t $LA\e[00m"
+        fi
+    elif [ $NUM -lt 4 ]
+    then
+        if [ `expr length $host` -lt 22 ]
+        then
+            echo -e "\e[01;33m\t $host \t\t $LA\e[00m"
+        else
+            echo -e "\e[01;33m\t $host \t $LA\e[00m"
+        fi
+    else
+        if [ `expr length $host` -lt 22 ]
+        then
+            echo -e "\e[00;31m\t $host \t\t $LA\e[00m"
+        else
+            echo -e "\e[00;31m\t $host \t $LA\e[00m"
+        fi
+    fi
+done
+
+exit 0
